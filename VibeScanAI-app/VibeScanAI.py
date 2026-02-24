@@ -5,7 +5,10 @@ import nltk
 # 1. BRAIN (Optimized)
 @st.cache_resource
 def load_analyzer():
-    nltk.download('vader_lexicon', quiet=True)
+    try:
+        nltk.data.find('sentiment/vader_lexicon.zip')
+    except LookupError:
+        nltk.download('vader_lexicon')
     return SentimentIntensityAnalyzer()
 
 analyser = load_analyzer()
