@@ -119,3 +119,39 @@ else:
         # Balloon travel phase
         time.sleep(5)
         st.rerun()
+
+# Adding a Minimalistic Footer
+st.markdown("---")
+st.markdown(
+    """
+    <style>
+        .footer-text {
+            display: flex; 
+            justify-content: space-between; 
+            color: #888888; 
+            font-size: 12px; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding-bottom: 20px;
+        }
+        .footer-link {
+            color: inherit !important; 
+            text-decoration: underline !important; 
+            font-weight: 500;
+        }
+        .footer-link:hover {
+            color: #333333 !important;
+        }
+    </style>
+    
+    <div class="footer-text">
+        <div>Cafe Menu v1.0</div>
+        <div>
+            Built with hunger by 
+            <a href='https://github.com/AryaBuwa ' target='_blank' class='footer-link'>
+                Arya
+            </a>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
