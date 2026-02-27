@@ -2,7 +2,7 @@ name: Alive Archive - Keep Apps Alive
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # ping every 6 hours
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping CafeMenu
-        run: curl -s https://cafemenu.streamlit.app
+        run: curl -sL --max-time 30 https://your-cafemenu-url.streamlit.app || echo "Timeout"
 
       - name: Ping VibeScanAI
-        run: curl -s https://vibescan.streamlit.app
+        run: curl -sL --max-time 30 https://your-vibescan-url.streamlit.app || echo "Timeout"
