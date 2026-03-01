@@ -1,27 +1,4 @@
-name: Alive Archive - Keep Apps Alive
-
-on:
-  schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
-
-jobs:
-  wake:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install Playwright
-        run: |
-          pip install playwright
-          playwright install chromium
-
-      - name: Run Robot
+      - name: Wake Apps
         run: |
           python - <<EOF
           from playwright.sync_api import sync_playwright
@@ -32,21 +9,27 @@ jobs:
           ]
 
           with sync_playwright() as p:
-              browser = p.chromium.launch()
-              for url in urls:
-                  print(f"Opening {url}")
-                  page = browser.new_page()
-                  page.goto(url)
-                  page.wait_for_timeout(15000)
+              browser = p.chromium.launch(headless=True)
 
+              for url in urls:
+                  print(f"\nOpening {url}")
+                  page = browser.new_page()
+                  page.goto(url, timeout=60000)
+
+                  # Wait up to 25 seconds for wake button
                   try:
-                      if page.get_by_text("Yes, get this app back up").is_visible(timeout=5000):
-                          page.get_by_text("Yes, get this app back up").click()
-                          print(f"Clicked wake button for {url}")
+                      page.get_by_role("button", name="Yes, get this app back up!").click(timeout=25000)
+                      print("Clicked wake button.")
                   except:
-                      print(f"No wake button found for {url}")
+                      print("Wake button not found (app may already be awake).")
+
+                  # Wait 25 more seconds so Streamlit fully loads
+                  page.wait_for_timeout(25000)
+                  print("Waited 25 seconds for full load.")
 
                   page.close()
 
               browser.close()
+
+          print("All apps processed.")
           EOF
