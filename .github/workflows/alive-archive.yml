@@ -1,3 +1,26 @@
+name: Alive Archive - Keep Apps Alive
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+
       - name: Wake Apps
         run: |
           python - <<EOF
@@ -16,14 +39,12 @@
                   page = browser.new_page()
                   page.goto(url, timeout=60000)
 
-                  # Wait up to 25 seconds for wake button
                   try:
                       page.get_by_role("button", name="Yes, get this app back up!").click(timeout=25000)
                       print("Clicked wake button.")
                   except:
                       print("Wake button not found (app may already be awake).")
 
-                  # Wait 25 more seconds so Streamlit fully loads
                   page.wait_for_timeout(25000)
                   print("Waited 25 seconds for full load.")
 
