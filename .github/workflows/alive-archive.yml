@@ -1,3 +1,26 @@
+name: Wake My App
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+
       - name: Run Robot
         run: |
           python - <<EOF
