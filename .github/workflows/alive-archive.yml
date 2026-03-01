@@ -1,16 +1,29 @@
-name: Alive Archive - Keep Apps Alive
+      - name: Run Robot
+        run: |
+          python - <<EOF
+          from playwright.sync_api import sync_playwright
 
-on:
-  schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+          urls = [
+              "https://cafemenu.streamlit.app",
+              "https://vibescan.streamlit.app"
+          ]
 
-jobs:
-  ping:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Ping CafeMenu
-        run: curl -sL --max-time 30 https://your-cafemenu-url.streamlit.app || echo "Timeout"
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              for url in urls:
+                  print(f"Opening {url}")
+                  page = browser.new_page()
+                  page.goto(url)
+                  page.wait_for_timeout(15000)
 
-      - name: Ping VibeScanAI
-        run: curl -sL --max-time 30 https://your-vibescan-url.streamlit.app || echo "Timeout"
+                  try:
+                      if page.get_by_text("Yes, get this app back up").is_visible(timeout=5000):
+                          page.get_by_text("Yes, get this app back up").click()
+                          print(f"Clicked wake button for {url}")
+                  except:
+                      print(f"No wake button found for {url}")
+
+                  page.close()
+
+              browser.close()
+          EOF
