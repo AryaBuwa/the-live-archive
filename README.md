@@ -35,8 +35,7 @@ The Live Archive is under active expansion. Future integrations and planned enha
 
 * **Predictive Analytics Dashboards:** Implementing time-series forecasting for financial trend analysis within **Spendly Pro**.
 * **Computer Vision Utilities:** Developing image-based data extraction tools for automated invoice and receipt processing.
-* **Automated Data Pre-processing:** Engineering specialized engines for cleaning and normalizing high-volume datasets.
-* **Advanced NLP Modules:** Integrating Transformer-based models for more nuanced sentiment intelligence in **VibeScan AI**.
+* **Random Quotes Generator:** Creating a web application to generate a random quote using animations on streamlit. 
 
 ---
 
