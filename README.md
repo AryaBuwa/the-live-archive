@@ -35,7 +35,7 @@ The Live Archive is under active expansion. Future integrations and planned enha
 
 * **Predictive Analytics Dashboards:** Implementing time-series forecasting for financial trend analysis within **Spendly Pro**.
 * **Computer Vision Utilities:** Developing image-based data extraction tools for automated invoice and receipt processing.
-* **Random Quotes Generator:** Creating a web application to generate a random quote using animations on streamlit. 
+* **Random Quotes Generator:** Creating a web application to generate a random quote using animations on streamlit.  
 
 ---
 
