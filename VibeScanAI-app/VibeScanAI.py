@@ -2,81 +2,87 @@ import streamlit as st
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
 
-# 1. BRAIN (Optimized)
+# 1. Analytical Engine
 @st.cache_resource
 def load_analyzer():
-    try:
-        nltk.data.find('sentiment/vader_lexicon.zip')
-    except LookupError:
-        nltk.download('vader_lexicon')
+    # Explicitly download the lexicon before initializing the analyzer
+    nltk.download('vader_lexicon', quiet=True)
     return SentimentIntensityAnalyzer()
 
-analyser = load_analyzer()
+analyzer = load_analyzer()
+# 2. Page Configuration
+st.set_page_config(page_title="Sentiment Analysis Tool", page_icon="📊", layout="centered")
 
-# 2. PAGE CONFIG (Full Width / No Sidebar)
-st.set_page_config(page_title="VibeScan AI", page_icon="📡", layout="centered")
+# Consolidated CSS and HTML Banner
+st.markdown("""
+    <style>
+        .banner { background:#f0f2f6; color:#31333F; padding:10px; text-align:center; border-radius:5px; border:1px solid #d1d5db; margin-bottom:25px; font-size:14px; font-weight:500; }
+        .footer { display:flex; justify-content:space-between; color:#888; font-size:12px; margin-top:50px; }
+        .lnk { color:#007BFF !important; text-decoration:underline !important; font-weight:500; }
+    </style>
+    <div class="banner">ℹ️ Planned update: LLM integration for advanced contextual reasoning is in development.</div>
+    """, unsafe_allow_html=True)
 
-# Callback function to clear the input
-def clear_scanner():
-    st.session_state.vibe_input = ""
+# Callback function to reset the interface
+def reset_interface():
+    st.session_state.text_input = ""
 
-# 3. HEADER SECTION
+# 3. Header Section
 with st.container():
-    st.markdown("<h1 style='text-align: center;'>📡 VibeScan AI</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: gray;'>VADER Lexicon v3.0 | Real-time Sentiment Decoder</p>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>Sentiment Analysis Dashboard</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: gray;'>VADER Lexicon v3.0 | Quantitative Linguistic Evaluation Using NLTK</p>", unsafe_allow_html=True)
     st.divider()
 
-# 4. INPUT AREA
-sentence = st.text_input("ENTER SIGNAL TRANSMISSION", placeholder="Type your thoughts here...", key="vibe_input")
+# 4. Input Interface
+sentence = st.text_input("Text input for evaluation", placeholder="Enter the text you wish to analyze...", key="text_input")
 
 if sentence:
-    # CORE ENGINE
-    sentiment = analyser.polarity_scores(sentence)
+    # Core Processing
+    sentiment = analyzer.polarity_scores(sentence)
     compound = sentiment['compound']
 
-    # SPECTRUM LOGIC
-    if compound >= 0.8: mood, icon, bg = "MAXIMUM JOY 🚀", "🔥", "success"
-    elif compound >= 0.4: mood, icon, bg = "RADIANT VIBES ✨", "☀️", "success"
-    elif compound >= 0.1: mood, icon, bg = "SOFT OPTIMISM 🕊️", "🌤️", "info"
-    elif compound > -0.1: mood, icon, bg = "OBJECTIVE DATA 🤖", "⚙️", "secondary"
-    elif compound > -0.4: mood, icon, bg = "MILD TENSION ⚡", "☁️", "warning"
-    elif compound > -0.8: mood, icon, bg = "DISTRESSED 🔥", "💥", "error"
-    else: mood, icon, bg = "TOXIC TURBULENCE ☢️", "☣️", "error"
+    # Professional Classification Logic
+    if compound >= 0.8: mood, icon, bg = "Highly positive", "📈", "success"
+    elif compound >= 0.4: mood, icon, bg = "Positive", "✅", "success"
+    elif compound >= 0.1: mood, icon, bg = "Slightly positive", "🔍", "info"
+    elif compound > -0.1: mood, icon, bg = "Neutral", "⚖️", "secondary"
+    elif compound > -0.4: mood, icon, bg = "Slightly negative", "📉", "warning"
+    elif compound > -0.8: mood, icon, bg = "Negative", "⚠️", "error"
+    else: mood, icon, bg = "Highly negative", "🚫", "error"
 
-    # 5. THE RESULTS "CARD"
+    # 5. Analysis Report
     with st.container(border=True):
-        st.markdown(f"<h2 style='text-align: center;'>{icon} {mood}</h2>", unsafe_allow_html=True)
+        st.markdown(f"<h3 style='text-align: center;'>{icon} Result: {mood}</h3>", unsafe_allow_html=True)
         
-        # Color-coded Status
-        if bg == "success": st.success("Positive Frequency Detected")
-        elif bg == "warning": st.warning("Potential Turbulence Detected")
-        elif bg == "error": st.error("Critical Negative Interference")
-        else: st.info("Stable Signal")
+        # Professional Status Indicators
+        if bg == "success": st.success("The analyzed text contains constructive or positive sentiment.")
+        elif bg == "warning": st.warning("The analyzed text contains elements of concern or minor negativity.")
+        elif bg == "error": st.error("The analyzed text contains significant negative sentiment.")
+        else: st.info("The analyzed text is balanced and objective.")
 
-        # Visual Intensity Bar
-        strength = (compound + 1) / 2
-        st.progress(strength, text=f"Signal Intensity: {strength:.0%}")
+        # Progress Bar
+        intensity = (compound + 1) / 2
+        st.progress(intensity, text=f"Calculated sentiment score: {intensity:.0%}")
 
-        # METRICS DASHBOARD
+        # Metrics Dashboard
         st.write("")
         c1, c2, c3 = st.columns(3)
-        c1.metric("✅ Positive", f"{sentiment['pos']:.2%}")
-        c2.metric("⚪ Neutral", f"{sentiment['neu']:.2%}")
-        c3.metric("❌ Negative", f"{sentiment['neg']:.2%}")
+        c1.metric("Positive score", f"{sentiment['pos']:.2%}")
+        c2.metric("Neutral score", f"{sentiment['neu']:.2%}")
+        c3.metric("Negative score", f"{sentiment['neg']:.2%}")
 
-    # 6. FOOTER ACTIONS
+    # 7. Supplementary Data
     st.write("")
-    with st.expander("🔍 Deep Telemetry Data"):
+    with st.expander("View raw data metrics"):
         st.json(sentiment)
 
-    # Replaced st.rerun() with an on_click callback
-    st.button("🔄 Reset Scanner", use_container_width=True, on_click=clear_scanner)
+    st.button("Reset analysis", use_container_width=True, on_click=reset_interface)
 
 else:
-    # Empty state message
-    st.info("Scanner idle. Please enter a text transmission above to begin.")
+    # Initial state
+    st.info("Please enter text in the field above to generate a sentiment report.")
 
-# 7. FINAL MINIMALIST FOOTER WITH LINK TO GITHUB
+# 8. Footer
 st.markdown("---")
 st.markdown(
     """
@@ -111,3 +117,4 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
