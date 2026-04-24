@@ -33,6 +33,8 @@ A centralized repository for production-grade Streamlit applications. This archi
 
 The Live Archive is under active expansion. Future integrations and planned enhancements include:
 
+* **ATS Resume Scanner:** Creating a web application using native React and Typescript using CSS.
+
 * **Predictive Analytics Dashboards:** Implementing time-series forecasting for financial trend analysis within **Spendly Pro**.
 * **Computer Vision Utilities:** Developing image-based data extraction tools for automated invoice and receipt processing.
 * **Random Quotes Generator:** Creating a web application to generate a random quote using animations on streamlit.  
