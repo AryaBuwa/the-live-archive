@@ -9,6 +9,12 @@ A centralized repository for production-grade Streamlit applications. This archi
 
 ## 🚀 Live Applications
 
+## 🧠 MindRunner
+
+**A Windows 95-styled browser game built around psychological assessment and logical thinking.**
+
+[![Play Now](https://img.shields.io/badge/Play%20Now-MindRunner-blue?style=for-the-badge)](https://mindrunner-353501572904.asia-south1.run.app/)
+
 ### ☕ CafeMenu App
 **Digital Interface Design** A dynamic digital menu focusing on modern UI principles and seamless user interaction models.
 👉 [**Launch Application**](https://cafemenu.streamlit.app)
@@ -21,8 +27,8 @@ A centralized repository for production-grade Streamlit applications. This archi
 
 ## 🛠️ Technical Stack
 
-* **Language:** Python
-* **Framework:** Streamlit
+* **Language:** Python, HTML, CSS, JavaScript
+* **Framework:** Streamlit, Google Cloud
 * **Visualization:** Plotly, Graph Objects
 * **Intelligence:** Scikit-learn, Natural Language Processing (NLP)
 * **Infrastructure:** GitHub Actions, Streamlit Cloud
@@ -33,9 +39,8 @@ A centralized repository for production-grade Streamlit applications. This archi
 
 The Live Archive is under active expansion. Future integrations and planned enhancements include:
 
-* **ATS Resume Scanner:** Creating a web application using native React and Typescript using CSS.
-
 * **Predictive Analytics Dashboards:** Implementing time-series forecasting for financial trend analysis within **Spendly Pro**.
+
 * **Computer Vision Utilities:** Developing image-based data extraction tools for automated invoice and receipt processing.
 * **Random Quotes Generator:** Creating a web application to generate a random quote using animations on streamlit.  
 
