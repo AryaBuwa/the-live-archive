@@ -7,23 +7,25 @@ on:
 
 jobs:
   wake:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.9'
+          python-version: '3.12'
 
       - name: Install Playwright
         run: |
+          python -m pip install --upgrade pip
           pip install playwright
-          playwright install chromium
+          playwright install --with-deps chromium
 
       - name: Wake Apps
         run: |
-          python - <<EOF
+          python - <<'EOF'
           from playwright.sync_api import sync_playwright
 
           urls = [
@@ -33,24 +35,18 @@ jobs:
 
           with sync_playwright() as p:
               browser = p.chromium.launch(headless=True)
-
               for url in urls:
                   print(f"\nOpening {url}")
                   page = browser.new_page()
                   page.goto(url, timeout=60000)
-
                   try:
                       page.get_by_role("button", name="Yes, get this app back up!").click(timeout=25000)
                       print("Clicked wake button.")
-                  except:
+                  except Exception:
                       print("Wake button not found (app may already be awake).")
-
                   page.wait_for_timeout(25000)
                   print("Waited 25 seconds for full load.")
-
                   page.close()
-
               browser.close()
-
           print("All apps processed.")
           EOF
